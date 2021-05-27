@@ -1,0 +1,1 @@
+This directory is intended to store all the walkthroughs I create for OSCP prep.  Given that many of these VMs already have walkthroughs, I may not create a walkthrough, but more of an analysis through an OSCP lens (i.e. Major takeaways, things to remember, why it might be helpful for OSCP/Pentesting in general, things to apply to pentesting processes)
