@@ -34,3 +34,7 @@ ScheduledTasks\ScheduledTasks.xml: Task Inner Element, TaskV2 Inner Element, Imm
 Printers\Printers.xml: SharedPrinter Element
 Drives\Drives.xml: Element-Specific Attributes
 DataSources\DataSources.xml: Element-Specific Attributes
+
+### Windows Priv Esc Guide
+Commands to run to check for XAMPP, Apache, or PHP and check for config files:
+`dir /s php.ini httpd.conf httpd-xampp.conf my.ini my.cnf`
