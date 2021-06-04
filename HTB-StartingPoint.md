@@ -41,8 +41,16 @@ Use www.cractstation.net for rainbow tables for known passwords
 - `JuicyPotato` to escalate privs
 
 # Pathfinder
+- `masscan` to determine open ports faster
+- `bloodhound python` generates the files necessary to ingest into the `bloodhound` app
+- `GetChangesAll` privileges within a domain can request replication data from a DC aka collect user hashes
+- If Kerberos pre-auth is disabled, it's vulnerable to ASREPRoasting (https://www.harmj0y.net/blog/activedirectory/roasting-as-reps/)
 
 # Included
+- Check with `udp` scan for nmap if nothing too fruitful, can show tftp (port 69/udp)
+- Vulnerable to directory traversal
+- Pentest Monkey Reverse Shell Script: https://github.com/pentestmonkey/php-reverse-shell/blob/master/php-reverse-shell.php
+- LXD Group = high privileged linux Group, which can be used to escalate to root
 
 # Markup - on this one
 
