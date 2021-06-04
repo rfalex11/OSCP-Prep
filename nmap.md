@@ -12,3 +12,5 @@ LUA Manual:
 - IPv4 offers obscure option called record route for gathering traceroute info
     - `nmap --ip-options R --packet-trace`
     - or most OS' offer `ping -R` which is easier to use than `nmap`
+- Use `hping -t 5 --traceroute -p ## -S IP_Addr` to do a deep dive for if a port is actually closed, or if an IDS is sending RST packets
+- Use `nmap --badsum` to prove a response was sent from a firewall, rather than prove that a filtered probe was dropped by the end host
