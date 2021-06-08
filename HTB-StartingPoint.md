@@ -52,8 +52,14 @@ Use www.cractstation.net for rainbow tables for known passwords
 - Pentest Monkey Reverse Shell Script: https://github.com/pentestmonkey/php-reverse-shell/blob/master/php-reverse-shell.php
 - LXD Group = high privileged linux Group, which can be used to escalate to root
 
-# Markup - on this one
+# Markup
+- When there's LFI, and `ssh` enabled, look for private keys (`~/.ssh/id_rsa`) to gain access
+- Use `icacls` on Win to look at permission
+- Windows `exe`s are available in Kali under `/usr/share/windows-binaries`
 
 # Guard
+- escape permissions limitations with `man man` then `!bash`
+- `/var/backups` location to check when enumerating the system
+- `hashcat -m 1800` = unix passwords
 
 # Base
