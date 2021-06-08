@@ -86,3 +86,8 @@ Register
 - A quick note before proceeding : On intel x86, the addresses are stored little-endian (so backwards).  The AAAA you are seeing is in fact AAAA :-)  (or, if you have sent ABCD in your buffer, EIP would point at 44434241 (DCBA)
 
 Continue at: `Determining the buffer size to write exactly into EIP`
+
+
+# Web App Attacks
+## [Burp Suite Webinar](https://www.youtube.com/watch?v=h2duGBZLEek&t=28s)
+- Github for Enumeration lists: `danielmiessler/Seclists`
