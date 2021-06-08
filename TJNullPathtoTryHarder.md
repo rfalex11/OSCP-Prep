@@ -38,3 +38,51 @@ DataSources\DataSources.xml: Element-Specific Attributes
 ### Windows Priv Esc Guide
 Commands to run to check for XAMPP, Apache, or PHP and check for config files:
 `dir /s php.ini httpd.conf httpd-xampp.conf my.ini my.cnf`
+
+## Buffer Overflows
+### Corelan
+### (Part I)[https://www.corelan.be/index.php/2009/07/19/exploit-writing-tutorial-part-1-stack-based-overflows/]
+- Most functions start with: `PUSH EBP` followed by `MOV EBP,ESP`
+
+Source Code:
+```
+#include  
+
+void do_something(char *Buffer)
+{
+     char MyVar[128];
+     strcpy(MyVar,Buffer);
+}
+
+int main (int argc, char **argv)
+{
+     do_something(argv[1]);
+}
+```
+
+Register
+```
+00401290  /$ 55             PUSH EBP
+00401291  |. 89E5           MOV EBP,ESP
+00401293  |. 81EC 98000000  SUB ESP,98
+00401299  |. 8B45 08        MOV EAX,DWORD PTR SS:[EBP+8]             ; |
+0040129C  |. 894424 04      MOV DWORD PTR SS:[ESP+4],EAX             ; |
+004012A0  |. 8D85 78FFFFFF  LEA EAX,DWORD PTR SS:[EBP-88]            ; |
+004012A6  |. 890424         MOV DWORD PTR SS:[ESP],EAX               ; |
+004012A9  |. E8 72050000    CALL                 ; \strcpy
+004012AE  |. C9             LEAVE
+004012AF  \. C3             RETN
+```
+- `SUB ESP,98` - decreemnt ESP by a certain number of bytes (most likely > 128 bytes) - gives space for the MyVar variable
+- `MOV` and `LEA` instructions basically setup parameters for `strcpy` function taking pointer where `argv[1]` sits and copying data from `MyVar` into it
+- `strcpy()` does not `PUSH` instructions to put data on stack, it reads a byte and writes it to the stack, using an index (i.e. `ESP`, `ESP+1`, `ESP+2`)
+    - So `ESP` still points to the beginning of the string
+- Means if data in Buffer is > `0x98`, it will overwrite saved `EBP` and eventually `EIP`
+- `ESP` still points to beginning of string, `strcpy()` completes as if nothing is wrong, then function kicks in.  Moving `ESP` back to where saved `EIP` was stored and issue a `RET`
+
+- _Stack Based Overflow_/_Stack Buffer Overflow_ - When a buffer on the stack overflows
+- _Stack Overflow_ - trying to write past the end of the stack frame
+
+- A quick note before proceeding : On intel x86, the addresses are stored little-endian (so backwards).  The AAAA you are seeing is in fact AAAA :-)  (or, if you have sent ABCD in your buffer, EIP would point at 44434241 (DCBA)
+
+Continue at: `Determining the buffer size to write exactly into EIP`
