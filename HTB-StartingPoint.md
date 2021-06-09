@@ -63,3 +63,6 @@ Use www.cractstation.net for rainbow tables for known passwords
 - `hashcat -m 1800` = unix passwords
 
 # Base
+- The developer is using `strcmp` to check the username and password, which is insecure and can easily be bypassed. This is due to the fact that if `strcmp` is given an empty array to compare against the stored password, it will return `null`. In PHP the `==` operator only checks the value of a variable for equality, and the value of `NULL` is equal to `0`. The correct way to write this would be with the `===` operator which checks both value and type. Let's open burp and catch the login request.
+- Locationf of webshells on kali `/usr/share/webshells`
+- If website is running on Linux - Enumeration tactic: `/var/www/html/login`
