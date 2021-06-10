@@ -1,0 +1,99 @@
+{
+  "main": {
+    "id": "bd92b51b4598690b",
+    "type": "split",
+    "children": [
+      {
+        "id": "5c9c98f8928c3e2c",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "TJNullPathtoTryHarder.md",
+            "mode": "source"
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "002e59fbb18322ff",
+    "type": "split",
+    "children": [
+      {
+        "id": "48be65eb3b50eee8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ffcecf56aac71bde",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "895da203b9e8ff48",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "393154684394c7bb",
+    "type": "split",
+    "children": [
+      {
+        "id": "a7e52d7469c980ee",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "03e32923bc955606",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "TJNullPathtoTryHarder.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "5c9c98f8928c3e2c",
+  "lastOpenFiles": [
+    "TJNullPathtoTryHarder.md",
+    "HTB_Academy.md",
+    "Rangeforce.md",
+    "README.md",
+    "Untitled.md",
+    "BHIS_SOC.md",
+    "nmap.md"
+  ]
+}

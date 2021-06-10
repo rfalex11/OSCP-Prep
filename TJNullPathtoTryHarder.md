@@ -83,10 +83,32 @@ Register
 - _Stack Based Overflow_/_Stack Buffer Overflow_ - When a buffer on the stack overflows
 - _Stack Overflow_ - trying to write past the end of the stack frame
 
-- A quick note before proceeding : On intel x86, the addresses are stored little-endian (so backwards).  The AAAA you are seeing is in fact AAAA :-)  (or, if you have sent ABCD in your buffer, EIP would point at 44434241 (DCBA)
+> A quick note before proceeding : On intel x86, the addresses are stored little-endian (so backwards).  The AAAA you are seeing is in fact AAAA :-)  (or, if you have sent ABCD in your buffer, EIP would point at 44434241 (DCBA)
 
-Continue at: `Determining the buffer size to write exactly into EIP`
+- `msf` has a tool `/pattern_create.rb` to generate a string that creates unique patterns, and `pattern_offset.rb` (`/usr/share/metasploit-framework/tools/exploit/`)
+- Scenario
+	- Buffer - All `A`s
+	- EBP - is 4 Bytes, and all `A`s as well
+	- EIP - is set to `B`s
+	- ESPs - All `C`s - to start
+		- modify and add "shellcode" - aka pattern to identify where to point/what to run
+		- analyze and determine there is a delay (aka ESP starts at 5th), which warrants `preshellcode`
+		- then the goal is to build the real shellcode, & tell EIP to jump to the address of the start of the shellcode
+			- overwrite EIP with `0x000ff730` aka address of `d esp` in the screenshots
+			- *turns out you cannot just overwrite EIP with a direct memory adress* . Not a good idea because it isn't reliable and also contains a null byte (`0x00`)
+			- So goal changes to make the application jump to own provided code
+				- Reference a register (or offset to a register), such as ESP, and find function that will jump to that register
+		- `ffe4` = opcode for `jmp esp`
+		- Searching for opcodes
+			- Tool DLL specific (walkthrough example): `s 0b1000 1 01fdd000 ff e4`
+			- Windows DLLs: `s 70000000 l fffffff ff e4`
+			- `findjmp`
+			- [`metasploit` opcode DB](https://web.archive.org/web/20080704110517/http://www.metasploit.org/users/opcode/msfopcode.cgi)
+			- `memdump`
+			- `pvefindaddr`
+		- `jmp esp` address from list must not have null bytes (since shellcode needs to go in `ESP`, and null bytes act as a string terminator - in most cases)
 
+Continue at: `Get shellcode and finalize the exploit`
 
 # Web App Attacks
 ## [Burp Suite Webinar](https://www.youtube.com/watch?v=h2duGBZLEek&t=28s)
