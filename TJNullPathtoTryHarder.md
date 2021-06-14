@@ -17,7 +17,7 @@ Desktop\met888.exe')`
 
 ## Transferring Files to Your Account - Tools -
 - `bitsadmin` - Windows command line tool to create download/upload jobs and monitor progress
-
+#linkuphere
 ## Privileger Escalation
 ### Windows Guides - Fundamentals
 http://www.fuzzysecurity.com/tutorials/16.html
@@ -111,5 +111,43 @@ Register
 Continue at: `Get shellcode and finalize the exploit`
 
 # Web App Attacks
+
 ## [Burp Suite Webinar](https://www.youtube.com/watch?v=h2duGBZLEek&t=28s)
 - Github for Enumeration lists: `danielmiessler/Seclists`
+
+# Random Links
+Cuz there's so much info in all these sources, I don't want to have 500 tabs of ToDos
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## [BugCrowd U - Burpsuite](#web-app-attacks)
+
+# [Testlink](#Web-App-Attacks)
+- XSS Walkthrough: https://www.youtube.com/watch?v=gkMl1suyj3M
+- XSS Game - Google Game to work on BurpSuite Skills: http://xss-game.appspot.com/level1
+- BugCrowd University Github: Other Links: https://github.com/bugcrowd/bugcrowd_university 
