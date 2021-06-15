@@ -108,94 +108,7 @@ Register
 			- `pvefindaddr`
 		- `jmp esp` address from list must not have null bytes (since shellcode needs to go in `ESP`, and null bytes act as a string terminator - in most cases)
 
-- Summary
-    - See that ESP pointed directly to the beginning of the buffer
-    - Use `jmp esp` statement to get shellcode to run
-
-### Corelan
-### (Part II)[https://www.corelan.be/index.php/2009/07/23/writing-buffer-overflow-exploits-a-quick-and-basic-tutorial-part-2/]
-- Ways to force execution of shellcode
-    - **Jump** or **call a register** that points to the shellcode (put that address in `EIP`)
-        - Instead of overwriting `EIP` with address in memory, overwrite `EIP` with address of "jump to register"
-    - **Pop Return** - if you can see an address on the stack that points to the shellcode, load that value into `EIP` by putting a pointer to `pop ret` or `pop pop ret` or `pop pop pop ret` into `EIP`
-    - **Push Return** -  put address on the stack and do a `ret`
-        - can't find a `or` opcode anywhere
-        - basically find a `push` followed by a `ret`
-        - Find the opcode for the sequence, find a address that performs this sequence and overwrite `EIP` with this address
-    - **jmp [reg + offset]** - find an instruction in one of OS or application DLLs, which add the required bytes to register and THEN jump to the register
-        - requires register that points to the buffer containing shellcode, but does _not_ point at the beginning of shellcode
-    - **Blind return** - overwrite `EIP` with address that performs a `RET` you load the value stored at `ESP` into `EIP`
-        - If available space in hte buffer (after `EIP` overwrite) is limited, but plenty of space before `EIP overwrite`, could use **jump code** in smaller buffer to jump to main shellcode in first
-    - **SEH** - overwrite the SEH handler with own address, and make it jump to your shellcode
-        - Ever yapplication has a default _Exception Handler_ which is provided by the OS
-        - Can make it more relaible on various Windows platforms
-        - Requires some more explanation before you start abusing SEH to write
-        - If you build an exploit that doesn't work on an OS, the payload might just cras hthe app
-            - By combining "regular" exploit with SEH exploit, you build a more reiable exploit
-
-#### `jmp`/call [reg]
-Requirements
-- Register is loaded with address that directly points to shellcode
-    - i.e. if `ESP` points at shellcode, can overwrite `EIP` with address of `call esp`
-- Works with all registers
-- Quite popular because `kernel32.dll` contains a lot of `call [reg]` addresses
-
-Functionality
-- Do a `call[reg]` to jump directly to shellcode
-
-#### `pop ret`
-Requirements
-- Useful if there's not a SINGLE register that points to shellcode
-- Address pointing to shellcode might be on stack
-- Only usable when ESP+offset already contains addresses which points to the shellcode
-
-Funtionality
-- Address pointing to shellcode might be on stack
-    - by `dump esp`, you can look at addresses, if one of addresses points to your shellcode, or buffer you control, can find a `pop ret` or `pop pop ret` to:
-        - take addresses from stack (skip them)
-        - jump to address which brings you to your shellcode
-    - Put a reference to `pop ret`
-        - will take some address from the stack(one addresses from each pop) and put the next address into `EIP`
-    - If that address points to shellcode, you win!
-
-Scenario #2
-- Control `EIP`, no register points to shellcode, but shellcode can be found at `ESP+8`
-    - can put a `pop pop ret` into EIP, which jumps to `ESP+8`
-    - Put a pointer to `jmp esp` at that location, it jump sto shellcode that sits right after `jmp esp`
-
-#### `push ret`
-Requirements
-- Need to overwrite `EIP` with address of `push [reg]` + `ret` sequence in one of DLLs
-- similar to `call [reg]`
-
-Functionality
-- if one of registers is directly pointing at shellcode & you cannot use `jmp[reg]` (to jump to shellcode):
-    - put address of that register on the stack, it will sit on top of the stack
-    - `ret` (Which takes the address back from the stack and jumps to it)
-- Find the opcode for `push esp` and `ret`
-- Search for opcode in DLL
-
-#### Blind REturn
-Requirements
-- Useful if
-    - Can't point `EIP` to register directly (no `jmp` or `call` instructions)
-    - You can control data at ESP
-- Need to have memory address of the shellcode (= address of ESP)
-    - avoid address that starts with/contains null bytes
-
-Functionality
-- Overwrite `EIP` with address pointing to a `ret` instruction
-- Hardcode address of shellcode at first 4 bytes of `ESP`
-- When `ret` is executed, last added 4 bytes are popped from stack, and put into `EIP`
-- Exploit jumps to shell
-
-- Find address of `ret` in DLL
-- Set first 4 bytes of shellcode (first 4 of ESP) to address where shellcode begins
-- Overwrite `IP` with address of `ret` instruction
-[26094 As][address of `ret][0x000fff730][shellcode]
-** contains a null byte, so it will not execute/shellcode isn't put in ESP
-
-Continue at `Dealing with Small Buffers: jumping anywhere with custom jumpcode`
+Continue at: `Get shellcode and finalize the exploit`
 
 # Web App Attacks
 
@@ -207,35 +120,14 @@ Cuz there's so much info in all these sources, I don't want to have 500 tabs of 
 
 This is a [Go Chapter](#random-links)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## [BugCrowd U - Burpsuite](#web-app-attacks)
+
+[link]()
 
 # [Testlink](#Web-App-Attacks)
 - XSS Walkthrough: https://www.youtube.com/watch?v=gkMl1suyj3M
 - XSS Game - Google Game to work on BurpSuite Skills: http://xss-game.appspot.com/level1
 - BugCrowd University Github: Other Links: https://github.com/bugcrowd/bugcrowd_university 
+
+
+Here is my link [test](#random-links)

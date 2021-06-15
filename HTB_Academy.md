@@ -53,3 +53,39 @@ Zoom
 `[CTRL]` + `[+]` - Zoom in.
 
 `[CTRL]` + `[-]` - Zoom out.
+
+# Getting Started - Windows
+- `Get-ExecutionPolicy -List` - check system Execution Policy - validate you can download, load, and run modules/scripts
+  - Can edit/change the policy for the scope of the process (i.e. current Powershell process)
+- `Set-ExecutionPolicy Unrestricted -Scope Process`
+- Install the `PSWindowsUpdate` with `Install-Module PSWindowsUpdate`
+- Update with `Install-WindowsUpdate -AcceptAll`
+
+## Defender Exemptions
+- `C:\Users\Username\`
+  - `\Documents\`
+    - `git-repos`
+    - `scripts`
+  - `\AppData\Local\Temp\Chocolatey`
+- Add exemption/exclusion with `Add-MpPreference -ExclusionPath "C:\directory\here`
+
+Tools to install older versions of Windows
+- https://community.chocolatey.org/
+- https://gist.github.com/AveYo/c74dc774a8fb81a332b5d65613187b15
+- https://www.heidoc.net/joomla/technology-science/microsoft/67-microsoft-windows-and-office-iso-download-tool%EF%BB%BF
+- https://rufus.ie/en_US/
+
+# Getting Started w/ HTB
+
+|Port(s) |	Protocol|
+|--------|----------|
+|20/21 (TCP) |	FTP|
+|22 (TCP) |	SSH|
+|23 (TCP) |	Telnet|
+|25 (TCP) |	SMTP|
+|80 (TCP) |	HTTP|
+|161 (TCP/UDP) |	SNMP|
+|389 (TCP/UDP) |	LDAP|
+|443 (TCP) 	|SSL/TLS (HTTPS)|
+|445 (TCP) 	| SMB|
+|3389 (TCP) |	RDP|
