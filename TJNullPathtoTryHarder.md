@@ -205,6 +205,7 @@ Continue at `Dealing with Small Buffers: jumping anywhere with custom jumpcode`
 # Random Links
 Cuz there's so much info in all these sources, I don't want to have 500 tabs of ToDos
 
+This is a [Go Chapter](#random-links)
 
 
 
