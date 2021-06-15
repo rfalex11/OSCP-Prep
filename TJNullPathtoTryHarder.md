@@ -88,7 +88,7 @@ Register
 - `msf` has a tool `/pattern_create.rb` to generate a string that creates unique patterns, and `pattern_offset.rb` (`/usr/share/metasploit-framework/tools/exploit/`)
 - Scenario
 	- Buffer - All `A`s
-	- EBP - is 4 Bytes, and all `A`s as well
+	- EBP - is 4 Bytes, and all `A`vscodes as well
 	- EIP - is set to `B`s
 	- ESPs - All `C`s - to start
 		- modify and add "shellcode" - aka pattern to identify where to point/what to run
@@ -127,7 +127,4 @@ This is a [Go Chapter](#random-links)
 # [Testlink](#Web-App-Attacks)
 - XSS Walkthrough: https://www.youtube.com/watch?v=gkMl1suyj3M
 - XSS Game - Google Game to work on BurpSuite Skills: http://xss-game.appspot.com/level1
-- BugCrowd University Github: Other Links: https://github.com/bugcrowd/bugcrowd_university 
-
-
-Here is my link [test](#random-links)
+- BugCrowd University Github: Other Links: <https://github.com/bugcrowd/bugcrowd_university>
