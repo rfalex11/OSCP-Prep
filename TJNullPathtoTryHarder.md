@@ -39,8 +39,8 @@ DataSources\DataSources.xml: Element-Specific Attributes
 Commands to run to check for XAMPP, Apache, or PHP and check for config files:
 `dir /s php.ini httpd.conf httpd-xampp.conf my.ini my.cnf`
 
-## Buffer Overflows
-### Corelan
+# Buffer Overflows
+## Corelan
 ### (Part I)[https://www.corelan.be/index.php/2009/07/19/exploit-writing-tutorial-part-1-stack-based-overflows/]
 - Most functions start with: `PUSH EBP` followed by `MOV EBP,ESP`
 
@@ -112,8 +112,8 @@ Register
     - See that ESP pointed directly to the beginning of the buffer
     - Use `jmp esp` statement to get shellcode to run
 
-### Corelan
-### (Part II)[https://www.corelan.be/index.php/2009/07/23/writing-buffer-overflow-exploits-a-quick-and-basic-tutorial-part-2/]
+
+## (Part II)[https://www.corelan.be/index.php/2009/07/23/writing-buffer-overflow-exploits-a-quick-and-basic-tutorial-part-2/]
 - Ways to force execution of shellcode
     - **Jump** or **call a register** that points to the shellcode (put that address in `EIP`)
         - Instead of overwriting `EIP` with address in memory, overwrite `EIP` with address of "jump to register"
@@ -133,7 +133,7 @@ Register
         - If you build an exploit that doesn't work on an OS, the payload might just cras hthe app
             - By combining "regular" exploit with SEH exploit, you build a more reiable exploit
 
-#### `jmp`/call [reg]
+### `jmp`/call [reg]
 Requirements
 - Register is loaded with address that directly points to shellcode
     - i.e. if `ESP` points at shellcode, can overwrite `EIP` with address of `call esp`
@@ -143,7 +143,7 @@ Requirements
 Functionality
 - Do a `call[reg]` to jump directly to shellcode
 
-#### `pop ret`
+### `pop ret`
 Requirements
 - Useful if there's not a SINGLE register that points to shellcode
 - Address pointing to shellcode might be on stack
@@ -163,7 +163,7 @@ Scenario #2
     - can put a `pop pop ret` into EIP, which jumps to `ESP+8`
     - Put a pointer to `jmp esp` at that location, it jump sto shellcode that sits right after `jmp esp`
 
-#### `push ret`
+### `push ret`
 Requirements
 - Need to overwrite `EIP` with address of `push [reg]` + `ret` sequence in one of DLLs
 - similar to `call [reg]`
@@ -175,7 +175,7 @@ Functionality
 - Find the opcode for `push esp` and `ret`
 - Search for opcode in DLL
 
-#### Blind REturn
+### Blind Return
 Requirements
 - Useful if
     - Can't point `EIP` to register directly (no `jmp` or `call` instructions)
@@ -195,7 +195,63 @@ Functionality
 [26094 As][address of `ret][0x000fff730][shellcode]
 ** contains a null byte, so it will not execute/shellcode isn't put in ESP
 
-Continue at `Dealing with Small Buffers: jumping anywhere with custom jumpcode`
+### Small Buffers - Custom Jumpcode
+Scenario: What if there isn't enough space to host hte entire shellcode?
+
+In example:
+    - 26094 bytes before overwriting EIP
+    - ESP points to 26094+4 bytes
+    - PLENNNNTTYYY of space
+
+What if?
+    - Only had 50 bytes?
+    - Maybe use the 26094 bytes?
+
+Steps
+1. Find 26094 bytes in memory (in order to reference)
+    - If you find the bytes reference, and find another register pointing at these bytes = EASY to put shellcode there
+2. Find within stack if the beginning buffer is referenced
+3. Can host the shellcode in the `A`'s and use the `X`s to jump to the `A`s
+    - Requirement: position inside the buffer with 26094 `A`s thats part of ESP @ `000ff849` - need to know exactly where within all the `A`s the shellcode needs to be put
+        - can be found using guesswork, custom patterns, or metasploit patterns
+    - Requirement: **jumpcode** - code that makes the jupm from `X`s to `A`s - but can't be > 50 bytes
+        - writing down required statements in assembly and translating to opcode
+            -In example: jumping to ESP+281 = add 281 to `ESP` then perform `jump esp`
+4. Overwrite `ESP` with `jmp esp`
+
+Example:
+- `ESP` points to the 50 `X`s (after 26094 `A`'s & `"BBBB"`)
+- Looking farther down the stack, find the `A`s again (at `000ff849`)
+
+End result:
+- Real shellcode placed in first part of string, and will end up at `ESP+300`
+- Real shellcode is prepended with `NOP`s
+- `EIP` will be overwritten with `0c01ccf23a` (points to a dll, run `jmp esp`)
+- Data ovewriting `EIP` will be overwritten with jump code that adds 282 to `ESP` and jumps to that address
+- After payload sent, `EIP` will jump to `ESP`, which triggers jump code to jump to `ESP+282` = `NOP` sled, and shell code execute.
+
+### `popad`
+- **popad** (pop all double) - will pop double words from the stack (`ESP`) into general purpose registers, in 1 action
+- can help with jumping to shellcode
+- Registers are loaded: `EDI`, `ESI`, `EBP`, `EBX`, `EDX`, `ECX`, and `EAX`
+- Result: `ESP` register is incremented after each register is loaded
+- One `popad` will take 32 bytes from `ESP` and pops them in registers in an orderly fasion
+- Opcode: `0x61`
+- Scenario:
+    - Need to jump 40 bytes, only have a couple of bytes to make the jump
+    - Issue 2 `popad`s to point `ESP` to shellcode
+        - Shellcode starts with `NOP`s
+
+### Short Jump & Conditional Jumps
+- short jump: opcode `0xeb` followed by the number of bytes (i.e. 30 byte jump = `0xeb,0x1e`)
+
+## Additional Links
+### Buffer Overflows Made Easy
+Playlist: https://www.youtube.com/playlist?list=PLLKT__MCUeix3O0DPbmuaRuR_4Hxo4m3G
+Correlates with TJNulls v2 Gude: https://github.com/johnjhacking/Buffer-Overflow-Guide
+
+Status: on Video 2/8
+- Need to download Windows 10, immunity debugger, and vulserver
 
 # Web App Attacks
 
@@ -203,13 +259,10 @@ Continue at `Dealing with Small Buffers: jumping anywhere with custom jumpcode`
 - Github for Enumeration lists: `danielmiessler/Seclists`
 
 # Random Links
-Cuz there's so much info in all these sources, I don't want to have 500 tabs of ToDos
+Cuz there's so much info in all these sources, I don't want to have 500 tabs of ToDos. Its more of a TOC for other sections of the document as well
 
-This is a [Go Chapter](#random-links)
-
-## [BugCrowd U - Burpsuite](#web-app-attacks)
-
-[link]()
+- [Buffer Overflows Made Easy](#buffer-overflows-made-easy)
+- Bugcrowd U - [BugCrowd U - Burpsuite](#web-app-attacks)
 
 # [Testlink](#Web-App-Attacks)
 - XSS Walkthrough: https://www.youtube.com/watch?v=gkMl1suyj3M
