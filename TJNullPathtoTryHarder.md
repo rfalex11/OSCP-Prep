@@ -253,6 +253,8 @@ Correlates with TJNulls v2 Gude: https://github.com/johnjhacking/Buffer-Overflow
 Status: on Video 2/8
 - Need to download Windows 10, immunity debugger, and vulserver
 
+- [Quick Guide to Assembly](https://inst.eecs.berkeley.edu/~cs161/sp15/discussions/dis06-assembly.pdf)
+
 # Web App Attacks
 
 ## [Burp Suite Webinar](https://www.youtube.com/watch?v=h2duGBZLEek&t=28s)
