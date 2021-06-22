@@ -39,7 +39,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#newtagg",
+                "query": "tag:#WindowsRegistry",
                 "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
