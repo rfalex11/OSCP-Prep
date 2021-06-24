@@ -430,3 +430,53 @@ HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run
 - Type `mmc` in start menu
 ## Windows Subsystem for Linux (WSL)
 - WSL can be installed in `PS` by running `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux` as an admin
+
+# Intro to Web Apps
+Tags: #webapps #webapplications
+- "Front End Trinity" = HTML, CSS, & Javascript.  Review these as a common procedure
+
+Continue @ `Attacking Web Apps`
+## Web App Layout
+
+
+## Front End vs Backend
+
+
+## Front End - HTML
+
+
+## Front End - CSS
+
+
+## Front End - JavaScript
+
+
+## Front End Vuls - Sensitive Data Exposure
+
+
+## Front End Vuls - HTML Injection
+
+
+## Front End Vuls - XSS
+
+
+## Front End Vuls - CSRF
+
+
+## Back End - Servers
+
+
+## Back End - Web Servers
+
+
+## Back End - DBs
+
+
+## Back End - Developing Frameworks & APIs
+
+
+## Back End Vuls - Common
+
+
+
+## Back End Vuls - Public
