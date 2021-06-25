@@ -431,9 +431,130 @@ HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run
 ## Windows Subsystem for Linux (WSL)
 - WSL can be installed in `PS` by running `Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux` as an admin
 
+# Web Requests
+Tags: #webrequests #HTTP
+## Intro
+### HTTP
+- Example website: `http://admin:password@inlanefreight.com:80/dashboard.php?login=true#status`
+  - Scheme: `http`
+  - User: `admin:password`
+  - Host: `inlanefreight.com`
+  - Port: `80`
+  - Path: `dashboard.php`
+  - Query String: `login=true`
+  - Fragment: `status`
+
+|Component| Description|
+|---|---|
+|Scheme | identify protocol - typically `http` or `https`|
+| User Info | credentials used to authenticate to host (optional)|
+| Host|resource location - either hostname or IP Address|
+|Port|Port to connect to on host running web service|
+|Path|Resource being accessed, can be file, folder.  If nothing specified, returns default index document (i.e. `index.html`)|
+|Query String|preceded by a `?` - component to pass information to the resource (optional). Consists of a parameter (`login`) and a value (`true`).  Multiple parameters can be separated by a ampersand (`&`)|
+|Fragment|processed by browsers, on clinet side to locate sections within primary resource|
+
+### Request/Response
+Tags: #httprequest #httpresponse
+Request: `GET /users/login.html HTTP/1.1`
+- HTTP Method: `GET` - specifies type of action to perform
+- Path: ` /users/login.html` - resource being accessed, can be suffixed w/Query STring
+- Version: `HTTP/1.1`
+
+Response: `HTTP/1.1 200 OK`
+- Version: `HTTP/1.1`
+- Response Code: `200 OK`
+
+### Headers
+Tags: #HTTP #Headers #HTTPHeaders
+Complete list of standard HTTP Headers: [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers)
+#### General Headers
+Common to both request and response. Contextual, to describe the message, rather than the contents
+- `Date` - date and time which message originated, preferred to convert to UTC
+- `Connection` - dictates the current network connectio nshould stay alive after request finishes: `close`, or `keep-alive`
+#### Entity Headers
+Common to both request/responses.  Used to describe the context (entity) being transferred by the message.  Usually found in `POST`/`PUT` requests
+- `Content-Type` - describes type of resource being transferred. Automatically added by browsers on client-side, and returned in server response
+- `Media-Type` - describes data being passed (i.e. `application/pdf`, `image/png`). **can be** CRUCIAL in server interpretation. `charset` denotes encoding standard (`UTF-8`)
+- `Boundary` - separate content when there's 2+ types of content in the same message
+- `Content-Length` - size of entity being passed. Necessary for server to read data from message body
+- `Content-Encoding` - specify type of encoding
+#### Request Headers
+For Client --> Server Comms (HTTP Request). Don't relate to the content of the message.
+- `Accept`, `Accept-*` and `IF-*` allow for conditional requests
+- `Cookie` & `User-Agent` allow for customization of the response
+- [Comprehensive List of HTTP Header Requests](https://tools.ietf.org/html/rfc7231#section-5)
+- `Host` - specify host being queried for resource. Domain name or IP. Host header is important for #enumeration
+- `User-Agent` - describe client requesting resources
+- `Accept` - describes media types client can understand. If multiple media types - separated by `,` and `*/*` signifies all media types.
+- `Cookie` - cookie-value pairs in the format `name=value`. Multiple cookies are separated by a `;` - stored client & server side
+- `Referer` - denotes where current request is coming from. Easy to manipulate
+- `Authorization` - another way for server to identify clients. Holds token unique to the client. Only stored client side & retrieved by server per request
+#### Respomse Header
+HTTP responses. Don't relate to message content
+- `Age`, `Location`, & `Server` provide more context about response
+- [HTTP Response Headers](https://tools.ietf.org/html/rfc7231#section-6)
+- `Server` - info about HTTP server, which handled request. Can get server version and #enumerate further
+- `Set-Cookie`- cookies needed for client identification. Parse the cookies and store for future requests
+- `WWW-Authenticate`- notifies client about type of authentication to access requested resource.
+#### Security Headers
+Response headers. USed to specify rules & policies followed by browser. [OWASP Secure Headers Project](https://owasp.org/www-project-secure-headers/)
+-`Content-Security-Policy`- website's policy towards injected resources (i.e. JavaScript & script resources). Instructs browser to accept resources from certain trusted domains. Prevents XSS
+-`Strict-Transport-Security`- prevents browser from accessing website over plaintext HTTP. Prevents MITM
+-`Referrer-Policy`- dictates whether browser should include value specified by `Referrer` header or not. Avoids disclosing sensitive URLs & info when browsing
+
+## HTTP Methods/Codes
+Methods tell server how to process request sent & how to reply.
+|Method|Description|
+|---|---|
+|`GET`| Most common method, requests a resource. |
+|`POST`| send data to server. Can handle multiple input types. Appended to request body after headers. Used to send info (forms/logins) or updating data to website |
+|`HEAD`| requests headers returned if `GET` is made. Used to check response length
+|`PUT`| similar to `POST`, creates new resources on server. Allows for malicious uploads #maliciousuploads #upload |
+|`DELETE` | Lets users delete existing resource on webserver. Can lead to #DoS |
+| `OPTIONS`| returns info about server (i.e. methods accepted by it)|
+
+`PUT`or `DELETE` = WebDAV servers
+
+|Response Codes|Description|
+|---|---|
+|1xx|Info & continues processing request|
+|2xx|successful request|
+|3xx|client redirect|
+|4xx|improper requests|
+|5xx|server issue|
+
+## Methods
+### `POST` Method
+- Places user parameters in HTTP Request body
+- When coming across a login form that accepts logins via `GET` request, it should be a high finding
+- Only characters that are needed to be encoded are those that separate params
+- Can send more data
+
+- Session IDs are almost always hashes, which can be identified by: containing only hex characters,and being divisible by 8
+- Popular `Content-Type` = `JSON`
+
+### `PUT` & `DELETE` Methods
+- Usually allowed on [Web Distributed Authoring & Versioning (WebDAV)](https://en.wikipedia.org/wiki/WebDAV) servers
+- WebDAV = extension of HTTP, used for remote management of files and folders
+
+## `cURL`
+- Default CURL requests: `GET`
+- can get verbose with `-v` flag
+- `-L` = follow redirects
+### `cURL` `POST` Method
+- default `Content-Type` is `application/x-www-form-urlencoded` *or* can be specified with `-H` flag
+- Data can be passed using `-d`
+- `--cookie` or `--cookie-jar` can specify cookie usage in `cURL`. Points to where cookies are saved.
+
+### `PUT`/`DELETE` `cURL` Methods
+- Use `-X` to specify other methods.
+
 # Intro to Web Apps
 Tags: #webapps #webapplications
 - "Front End Trinity" = HTML, CSS, & Javascript.  Review these as a common procedure
+- Can add creds to hyperlink, or use `-u` flag
+
 
 Continue @ `Attacking Web Apps`
 ## Web App Layout
