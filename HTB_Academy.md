@@ -558,7 +558,42 @@ Tags: #webapps #webapplications
 
 Continue @ `Attacking Web Apps`
 ## Web App Layout
+Layers:
+- **Infrastructure** - required components (i.e. Database) needed for functionality. Many different models
+  - Examples: **Client-Server**; **One Server**; **Many Servers - 1 DB**; and **Many Servers Many DBs**
+- **Components** - what web appliation interacts with - divided into **UI/UX**, **Client** and **Server**
+  - Example Components:
+    - Client
+    - Server (Webserver, Web App Logic, Database)
+    - Services (Microservices; 3rd Party Integrations; Web App Integrations)
+    - Functions (Serverless)
+- **Architecture**- relationship between web app **components**
+  - Presentation Layer - UI Process components that enable comms with app & system. Returned via HTML, JS, and CSS
+  - App Layer - Ensures all client requests correctly processed and validates criteria (auth, privs, & data)
+  - Data Layer - works with App Layer to determin where require data is stored/how it's accessed
 
+### Infrastructure
+**Client-Server**
+- Server hosts web app and distributes it to any client trying to access
+- Two Components: **Front End** (executed on client/browswer) and **Back End** (compiled, interpreted and executed by hosting server)
+
+**One Server**
+- Entire Web App(s) & components hosted on a single server
+
+### Microservices
+Independent components of wep app, which - in most cases - are programmed for 1 task only
+- Communication is stateless, as data is stored separately from the various microservices
+- considered *service-oriented architecture(SOA)* - a collection of different automated functions focused on a single business goal
+- Can be written in different programming languages and still interact
+
+Benefits:
+- Agility
+- Flexible Scaling
+- Easy Deployment
+- Reusable Code
+- Resilience
+
+[Whitepaper on Microservices](https://d1.awsstatic.com/whitepapers/microservices-on-aws.pdf)
 
 ## Front End vs Backend
 
