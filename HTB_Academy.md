@@ -595,32 +595,107 @@ Benefits:
 
 [Whitepaper on Microservices](https://d1.awsstatic.com/whitepapers/microservices-on-aws.pdf)
 
-## Front End vs Backend
+### Serverless
+Provide application frameworks to build web apps without worrying about servers. Run on stateless computing containers.
+[AWS Serverless Offerings](https://aws.amazon.com/serverless)
+[AWS Serverless Explanation](https://aws.amazon.com/lambda/serverless-architectures-learn-more/)
 
+
+## Front End vs Backend
+### Front End
+- source code of web page viewed when visiting web app - usually including HTML, CSS, and JavaScript.
+
+### Back End
+- Four Main back end Components:
+  - **Back End Server** - i.e. Linux, Windows, Container
+  - **Web Server** - Apache, NGINX, IIS
+  - **Database** - MySQL, MSSQL, Oracle, PostgreSQL, NoSQL, MongoDB
+  - **Dev Framework** - PHP, C#, Java, Python, JavaScript
+
+Back End Jobs:
+- main logic and services of back end of web app
+- Main code and functionalities
+- Develop & maintain backend database
+- Develop & implement libraries
+- Implement technical/business needs for web app
+- Implement main APIs for front end component comms
+- Integrate remote servers & cloud services into web app
 
 ## Front End - HTML
-
+- Each element can contain other HTML elements
+- Main `html` tag should contain all other elemtns iwthin the page, which falls under `document` element
+  - Distinguishes `html` from `xml` and other languages
+- Tags have element `id`s, for CSS to format the element
+- In URLs, browsers can only use ASCII encoding
+- Document Object Model (`DOM`): platform, and language neutral interface that allows programs and scripts to dynamically access and update the content, structure, and style of a document
+  - `<head>` element - contains elements that are not directly printed to teh page
+  - `<body>` - includes all the main page elements
+  - `<style>` - holds' the page's CSS code
+  - `<script>` - holds JS code of page
+- **DOM Standard**
+  - *Core DOM* - standard model for all document types
+  - *XML DOM* - standard for XML Docs
+  - *HTML DOM* - standard for HTML Docs
+- Dom references: `document.head` ; `document.h1`
+- Helps understand where each element on a page is located
 
 ## Front End - CSS
+- Formats and sets the style of HTML elements
+- Defines the style for that element in `{}`. For example: `element { property: value }`
+- [XSS Animation Properties](https://www.w3schools.com/css/css3_animations.asp)
+- CSS Frameworks: Bootstrap, SASS, Foundation, Bulma, Pure
 
 
 ## Front End - JavaScript
+- Predominantly front-end executed within broswer, but can be used on back-end with web-app development like `NodeJS`
+- JavaScript controls functionality of front-end
+  - HTML/CSS change how a web page looks
+- Can load javascript with the following syntax:
+Code: `HTML`
+```
+<script type="text/javascript">
+  ...JS Code...
+</script>
+```
+- Load remote content with: `<script src="./script.js"></script>`
 
+Used to:
+- Web Page Functionality - ex. update web page in real time, dynamically updating content in real time, accepting/processing user input, etc.
+- Automate Complex Processes and perform HTTP Requests to interact w/back end components
+- Send & Retrieve Data through Ajax
+- Used CSS for advanced animations
+
+- **JavaScript Frameworks** - have libraries that make it simple to re-create advanced functionalities (i.e. user login, registration, etc). Examples: AngularJS, React.js, Vue.js, and jQuery
+- [Listing/Comparison of JS Frameworks](https://en.wikipedia.org/wiki/Comparison_of_JavaScript_frameworks)
 
 ## Front End Vuls - Sensitive Data Exposure
-
+Tags: #dataexposure #sensitivedataexposure #frontend
+- **Sensitive Data Exposure** - Availability of sensitive data in clear-text to the end user - usually found in the source code of the web page, or page source.
 
 ## Front End Vuls - HTML Injection
-
+Tags: #htmlinjection #webinjection
+- **HTML Injection** - unfiltered user input is displayed on page
+  - Retrieving previously submitted code (i.e. user comment from back end DB)
+  - Directly displaying unfiltered user input through JS on front end
+- Can include malicious HTML code (i.e. external login)
 
 ## Front End Vuls - XSS
-
+- **Cross Site Scripting** - *injecting JS* to be executed on client-side.
+  - **Reflected XSS** - user input is displayed on page after processing (i.e. search result or error message)
+  - **Stored XSS** - Back End DB stores user input & displays upon retrieval (i.e. post, comment)
+  - **DOM XSS** - User input directly shown in browser, and written to HTML DOM object (i.e. vulnerable username/page title)
 
 ## Front End Vuls - CSRF
-
+- **XSRF** - utilize XSS Vulnerabilities to perform queries & API calls on web apps that user is authenticated. Attacker can perform actions as authenticated user
+- Prevention
+  - Measures on back end to detect and filter user input
+  - Filter & sanitize user input on front end
+  - **Sanitation** - removing special characters & non-standard characters from user input before displaying
+  - **Validation** - ensure submitted user input matches the expected format
+  - WAF
 
 ## Back End - Servers
-
+- [Web Solution Stacks](https://en.wikipedia.org/wiki/Solution_stack)
 
 ## Back End - Web Servers
 
