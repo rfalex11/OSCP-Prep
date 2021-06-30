@@ -697,17 +697,69 @@ Tags: #htmlinjection #webinjection
 ## Back End - Servers
 - [Web Solution Stacks](https://en.wikipedia.org/wiki/Solution_stack)
 
-## Back End - Web Servers
-
-
 ## Back End - DBs
+- Relationship between tables within a database is called a **schema**
 
+Within PHP can connect to DB: `$conn = new mysqli("localhost", "user", 'pass')`
+Can create new DB:
+```
+$sql = "CREATE DATABASE database1";
+$conn->query($sql)
+```
+Can use `mysqli` to connect to database, and run queries
+```
+$conn = new mysqli("localhost", "user", "pass", "database1");
+$query = "select * from table_1";
+$result = $conn->query($query);
+```
+
+Using User Input:
+```
+$searchInput =  $_POST['findUser'];
+$query = "select * from users where name like '%$searchInput%'";
+$result = $conn->query($query);
+```
 
 ## Back End - Developing Frameworks & APIs
+Web Dev Frameworks
+- Laravel (PHP) - startups/smaller companies & powerful yet easy to dev for
+- Express (Node.JS)
+- Django (Python)
+- Rails (Ruby)
+- APIs connect front end and back end to send data back and forth
+- Front End uses APIs toask back end components for specific task with specific input
+- Back end processes the request, performs the functions as necessary and returns response to front end
 
+### Query Params
+- Default method is `GET`/`POST` params
+- Can specify values for certain parameters used within the page for back end components to process & respond
+  - `search.php` would take `item` param, which is used to specify the search, and so passing it through a URL would look like `search.php?item=apples`
+  - `POST` param would pass it as data at the bottom of a `POST HTTP` request
+
+- API - specifies how app can interact with other applications
+- Usually accessible over `HTTP` and handled and translated through web servers
+- **SOAP (Simple Object Access)** - shares data through XML - request is made in XML via HTTP request, and response returned in XML
+  - Front end parses XML output properly
+  - Useful for structured & binary data
+  - Often used with serialized objects
+  - Useful for sharing *stateful* objects
+- **REST (Representational State Transfer)** - shares data through URL path (`search/users/1`) and returns output in JSON (`userid 1`)
+  - Focus on page w/ 1 type of input directly thourgh URL path
+  - Useful to search, sort, filter
+  - Usually breaks web app functionality into smaller APIs that use smaller requests to allow web app to perform more advanced actions
+  - Requests in `JSON` - and response sin `JSON`, XML, or `x-www-form-urlencoded` or even raw data
+  - Uses `GET` to retrieve data, `POST` to create, `PUT` to update existing, and `DELETE` to remove data
 
 ## Back End Vuls - Common
-
+**Broken Authentication**- user can bypass authentication functions (i.e. regular user become admin without privs to do so)
+**Broken Acess Control** - user can access pages & features they shouldn't have access to
+**Malicious File Upload** - upload malicious script which can execute commands on remote server
+**Command Injection** - insert commands as regularly intended content which can execute commands on back end server to gain control
+**SQLi** - 
 
 
 ## Back End Vuls - Public
+Tags: #publicvulns #publicvulnerabilities #vulnerabilities
+https://www.vulnerability-lab.com/
+https://www.rapid7.com/db/
+https://www.exploit-db.com/
