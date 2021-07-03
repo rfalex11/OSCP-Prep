@@ -1,6 +1,9 @@
+PWK_Recommended_Content
+
 # Offensive Security Recommended Content
 
 -[The Journey to Try Harder: TJnull’s Preparation Guide for PEN-200 PWK/OSCP 2.0](https://www.netsecfocus.com/oscp/2021/05/06/The_Journey_to_Try_Harder-_TJnull-s_Preparation_Guide_for_PEN-200_PWK_OSCP_2.0.html)
+	- https://docs.google.com/spreadsheets/d/12bT8APhWsL-P8mBtWCYu4MLftwG1cPmIL25AEBtXDno/edit#gid=2048224779
 -[Scund00r Passing OSCP](https://scund00r.com/all/oscp/2018/02/25/passing-oscp.html#overview)
 -[A Detailed Guide on OSCP Preparation – From Newbie to OSCP](http://niiconsulting.com/checkmate/2017/06/a-detail-guide-on-oscp-preparation-from-newbie-to-oscp/)
 -[John J OSCP Preparation GuideAdditional Resources](https://johnjhacking.com/blog/the-oscp-preperation-guide-2020/)

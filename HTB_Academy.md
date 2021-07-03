@@ -1,3 +1,5 @@
+HTB_Academy
+
 # Hack the Box Academy
 
 # Learning Process
@@ -219,7 +221,7 @@ Enumeration Scripts:
 - [0xdf hacks Stuff](https://0xdf.gitlab.io/) - walkthroughs of HTB, write-ups on recent exploits/attacks, aD Exploitation techniques, CTF event write-ups, bug bounty report write ups.
 
 ## HTB Challenges & Boxes
-
+```
 <p>There are many beginner-friendly machines on the main HTB platform. Some recommended ones are:</p>
 <table>
 <thead>
@@ -229,12 +231,13 @@ Enumeration Scripts:
 <th><a href="https://www.hackthebox.eu/home/machines/profile/121">Nibbles</a></th>
 <th><a href="https://www.hackthebox.eu/home/machines/profile/108">Shocker</a></th>
 <th><a href="https://www.hackthebox.eu/home/machines/profile/144">Jerry</a></th>
-
+```
 Challenges
+```
 th><a href="https://www.hackthebox.eu/home/challenges/Reversing?name=Find%20The%20Easy%20Pass">Find The Easy Pass</a></th>
 <th><a href="https://www.hackthebox.eu/home/challenges/Crypto?name=Weak%20RSA">Weak RSA</a></th>
 <th><a href="https://www.hackthebox.eu/home/challenges/Pwn?name=You%20know%200xDiablos">You know 0xDiablos</a></th>
-
+```
 # Windows Fundamentals
 Tags: #Windows #directories #WindowsDirectories
 ## Intro to Windows 
@@ -697,69 +700,231 @@ Tags: #htmlinjection #webinjection
 ## Back End - Servers
 - [Web Solution Stacks](https://en.wikipedia.org/wiki/Solution_stack)
 
-## Back End - DBs
-- Relationship between tables within a database is called a **schema**
+---
+# Javascript Deobfuscation
+## Code Obfuscation
+- **Obfuscation** - technique used to make script more difficult to read by humans while allowing the same functionality
+	- could impact performance
+- Tools can take code input, and re-write code to make more difficult to design
+- Obfuscation hides code from reuse or copying without developer's permission, or give additional layer of security
+- Can also be used for malicious purposes to circumvent IDS/IPS
 
-Within PHP can connect to DB: `$conn = new mysqli("localhost", "user", 'pass')`
-Can create new DB:
+## Basic Obfuscation
+- **Code Minification** - can take an entire code in a single line
+	- Tool: [javascript-minifier](https://javascript-minifier.com/)
+- **Code Packing** - obfuscate code by converting words and symbols into a list or dictionary and refer to them using `(p,a,c,k,e,d)` function to rebuild original code during execution
+	- Tool: [BeautifyTools](http://beautifytools.com/javascript-obfuscator.php)
+- Use [JSConsole](https://jsconsole.com/) to view code
+	
+## Advanced Obfuscation
+- https://obfuscator.io/ - can encode string arrays, rotate string arras and shuffle string arrays
+- [JSF](http://www.jsfuck.com/)
+- [JJ Encode](https://utf-8.jp/public/jjencode.html)
+- [AA Encode](https://utf-8.jp/public/aaencode.html)
+- Will slow down code from running, so not recommended unless bypassing web filters or restrictions
+
+## Deobfuscation
+- Two tools to help: [Prettier](https://prettier.io/playground/) and [Beautifier](https://beautifier.io/)
+	- structures code with proper tab/space formatting
+- [JSNice](http://www.jsnice.org/) helps with deobfuscation
+
+## Code Analysis
 ```
-$sql = "CREATE DATABASE database1";
-$conn->query($sql)
+'use strict';
+/**
+ * @return {undefined}
+ */
+function generateSerial() {
+  /** @type {string} */
+  var flag = "HTB{1_4m_7h3_53r14l_g3n3r470r!}";
+  /** @type {!XMLHttpRequest} */
+  var xhr = new XMLHttpRequest;
+  /** @type {string} */
+  var url = "/serial.php";
+  xhr.open("POST", url, true);
+  xhr.send(null);
+}
+;
 ```
-Can use `mysqli` to connect to database, and run queries
+### Code Variables
+- start with `var`, can google `new` variables to determine what they are, like `XMLHttpRequest` (JS function to handle web requests)
+
+### Code Functions
+- `xhr.open` is used with `POST` and `url`.  Again can google
+- `xhr.send` sends request
+
+## HTTP Requests
+- can send `POST` request with: `curl -s 178.128.45.146:31710/serial.php -X POST`
+
+## Decoding
+#base64 #hex #rot13 #caesarcipher
+Three most common encoding: `base64`, `hex` and `rot13`
+### `base64`
+- Reduces use of special characters (alphanumeric and `+` and `/` only)
+- Uses `=` to pad since strings are always encoded in multiples of 4
+
+### `hex`
+- shown as `0-9` and `a-f` characters
+- Use `man ascii` to see hex conversions
+- can decode hex with `xxd -p -r`.  The `-r` flag decodes, while `-p` prints output in plaintext
+
+### `rot13`/Caesar Cipher
+- `rot13` shifting forward 13 characters
+- Can use `tr` to translate characters 13 times `echo https://www.hackthebox.eu/ | tr 'A-Za-z' 'N-ZA-Mn-za-m'``
+- Can decode the same way `echo uggcf://jjj.unpxgurobk.rh/ | tr 'A-Za-z' 'N-ZA-Mn-za-m'
+- Can use https://rot13.com/
+- [Cipher Identifier](https://www.boxentriq.com/code-breaking/cipher-identifier) can auto detect encodings
+
+---
+# Network Enumeration w/`nmap`
+Access to systems can be boiled down into two points:
+- Functions/resources that allow interaction with target/provide additional info
+- Info that provides with more important info to access target
+
+## Intro to `nmap`
+- `TCP-SYN` scan (`-sS`) default setting (when `r00t`) otherwise `-sT` TCP Scan is default
+- Sends 1 packet w/`SYN` set
+	- `SYN-ACK` = `open`
+	- `RST` = `closed`
+	- no packet response or error = `filtered`
+
+## Host Enumeration
+#nmap #hostdiscovery #icmpechorequest #icmp
+### Host Discovery
+- Most effective host discovery is to use **ICMP Echo Requests**
+- `sudo nmap 10.129.2.0/24 -sn -oA tnet | grep for | cut -d" " -f5`
+	- scans the `10.129.2/24` subnet using a ping scan
+- `namp` automatically ping scans with `ICMP Echo Requests` with `-PE` flag
+	- expect *ICMP Reply* back
+	- could get `ARP Reply` if `ARP Ping` was sent instead (on same subnet)
+- Can disable *ARP Ping* with `--disable-arp-ping`
+- `--packet-trace` provides insights into packets sent
+- `--reason` = more information about why host/port was marked
+More strategies: https://nmap.org/book/host-discovery-strategies.html
+- TTL ICMP Echo Reply inference: https://packetpushers.net/ip-time-to-live-and-hop-limit-basics/
+### Host & Port Scanning
+- `open` = occurs with `TCP`/`UDP` connections and `SCTP assocations`
+- `unfiltered` = only for `TCP-ACK` scans, port is accessible, but unclear if open/closed
+- `closed|filtered` = `IP ID idle` scans - impossible to determine port is closed or filtered by firewall
+- Deactivate ICMP Echo Requests with `-Pn`, DNS Resolution with `-n`
+- Can scan different ports individually on the same host to see the response time if `filtered`.  The longer the response, likelihood that firewall is blocking. Can validate with `--packet-trace` to see responses (sign of no firewall)
+
+#### UDP Scans
+- For most, you will get `open|filtered`, unless you have ICMP Response with `error code 3` - in whiich case it will be `closed`
+
+### Saving Results
+- Use `xsltproc` to translate XML reports to HTML
+	- `xsltproc target.xml -o target.html`
+
+### Service Enumeration
+- Use `--stats-every=5s` to provide periodic scan results
+- Nmap looks for banners of scanned ports and prints them. Attempts to match via signature-based matching system
+
+
+## Firewall/IDS/IPS Evasion
+- Packets can be either **dropped** or **rejected**
+- For **rejected** packets with `RST` flag, it can contain ICMP error codes such as: `Net Uncreachable`, `Net Prohibited`, `Host Unreachable`, `Host Prohibited`, `Port Unreachable`, or `Proto Unreachable`
+- TCP ACK (`-sA`) scans are harder to filter for firewalls/IDS/IPS than `-sS` or `-sT`
+	- `-sA` sends TCP with `ACK` flag only (middle step of 3WHS)
+	- makes more difficult for defenses to determine if connection was initiated internally or externally
+- nmap has `RCVD` packets in hte `--packet-trace` - can show discrepancy of TCP flags sent back with different scan types (`-sA` vs `-sS`)
+
+### Detect IPS/IDS
+- Several **VPS** (Virtual Private Servers) w/ different IPs are recommended to determine if IDS/IPS on systems
+- Decoy scanning with `-D` flag - nmap generates random IP addresses into the IP header to desguise origin
+	- Ex. Using `-D RND:5` - uses `5` `Random` IP addresses
+	- The rmeote hosts (decoys) must be alive, otherwise you might cause a `SYN`-flood
+- Can use `-S` to switch the Source IP Address
+
+### DNS Proxying
+- Can use specific DNS servers `--dns-server <ns>,<ns>`
+	- Useful for DMZs - as company's DNS more trusted than regular Internet DNS, might be able to interact w/Internal Network
+- Can use **TCP Port 53** as source port (`--source-port`)
+#netcat #nc
+- Can use `ncat -nv --source-port 53 <DST_IP> <DST_PORT>` to connect to services while specifying source port
+
+### Evading IDS/IPS - Easy
 ```
-$conn = new mysqli("localhost", "user", "pass", "database1");
-$query = "select * from table_1";
-$result = $conn->query($query);
+sudo nmap 10.129.78.81 -sS -O -p 21,22,25,80,443 --source-port 53 --disable-arp-ping -n  --stats-every=1m -D RND:5
+Starting Nmap 7.91 ( https://nmap.org ) at 2021-07-01 14:20 EDT
+Nmap scan report for 10.129.78.81
+Host is up (0.15s latency).
+
+PORT    STATE    SERVICE
+21/tcp  closed   ftp
+22/tcp  open     ssh
+25/tcp  filtered smtp
+80/tcp  open     http
+443/tcp filtered https
+No exact OS matches for host (If you know what OS is running on it, see https://nmap.org/submit/ ).
+TCP/IP fingerprint:
+OS:SCAN(V=7.91%E=4%D=7/1%OT=22%CT=21%CU=44082%PV=Y%DS=2%DC=I%G=Y%TM=60DE077
+OS:0%P=x86_64-pc-linux-gnu)SEQ(SP=103%GCD=3%ISR=109%TI=Z%CI=I%II=I%TS=8)OPS
+OS:(O1=M54DST11NW7%O2=M54DST11NW7%O3=M54DNNT11NW7%O4=M54DST11NW7%O5=M54DST1
+OS:1NW7%O6=M54DST11)WIN(W1=7120%W2=7120%W3=7120%W4=7120%W5=7120%W6=7120)ECN
+OS:(R=Y%DF=Y%T=40%W=7210%O=M54DNNSNW7%CC=Y%Q=)T1(R=Y%DF=Y%T=40%S=O%A=S+%F=A
+OS:S%RD=0%Q=)T2(R=N)T3(R=N)T4(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F=R%O=%RD=0%Q=)T5(R
+OS:=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)T6(R=Y%DF=Y%T=40%W=0%S=A%A=Z%F
+OS:=R%O=%RD=0%Q=)T7(R=Y%DF=Y%T=40%W=0%S=Z%A=S+%F=AR%O=%RD=0%Q=)U1(R=Y%DF=N%
+OS:T=40%IPL=164%UN=0%RIPL=G%RID=G%RIPCK=G%RUCK=G%RUD=G)IE(R=Y%DFI=N%T=40%CD
+OS:=S)
+
+Network Distance: 2 hops
 ```
 
-Using User Input:
+Looks like the `--source-port` was excessive, as well as `-D RND:5`.
+
+---
+# Login Brute Forcing
+## Intro to Brute Forcing
+Files with Hashed Passwords:
+| Windows | Linux |
+|---|---|
+|unattend.xml | shadow|
+|sysprep.inf|shadow.bak|
+|SAM| password|
+
+## Basic HTTP Auth Brute Forcing
+### Password Attacks
+Basic HTTP Authentication Scheme
+- Uses User ID & Password for Athentication
+1. Client sends request without authentication information in first request
+2. Server responds with `WWW-Authenticate` header field, which requests client to provide credentials. The header field also defines the details of how auth takes place
+3. Client is asked to submit authentication info
+4. Server transmits the "realm" (character string that tells client who is requesting the data)
+5. Client base64 encodes the user ID & password & encoded character string is transmitted to the server
+
+### Username Brute Force
+Hydra requires 3 flags: **Credentials** (`-l`/`-L` = username/usernames; `-p`/`-P` = password/passwords) , **Target Host**, and **Target Path**
+- `-f` - stop after finding first successful login
+- `-u` - tires all users on each password (default = trying all passwords in list on 1 user)
+
+## Web Forms Brute Forcing
+### Hydra Modules
+- *Admin Panels* = manage servers, services and configurations - and potentially direct OS Commands
+- View supported `hydra` modules with: `hydra -h | grep -i "Supported Services" | tr ":" "\n" | tr " " "\n" | column -e`
+- `http[s]-{head|get|post}` - basic HTTP authentication
+- `http[s]-post-form` - for login forms (i.e. `.php`, `.aspx`)
+- Can determine if first/second module is needed based on file extension of page
+	- Can determine `http[s]-post-form` type (`GET` vs `POST`) by  attempting login to URL
+		- If any input is pasted into URL = `GET`
+		- Otherwise = `POST`
+- Can use `-U` flag to explain more about a module
+- Capture a Form's Parameters SHORTCUT!!! 
+	- Use Browser's Dev tools - the `Network Tool`
+	- Right click on the request (`POST`) and select `Copy` --> `Copy POST Data` or `Copy as cURL`
+
+## Service Authentication Attacks
+### Personalized Wordlists
+- `cupp` to create wordlists
 ```
-$searchInput =  $_POST['findUser'];
-$query = "select * from users where name like '%$searchInput%'";
-$result = $conn->query($query);
+sed -ri '/^.{,7}$/d' william.txt            # remove shorter than 8
+sed -ri '/[!-/:-@\[-`\{-~]+/!d' william.txt # remove no special chars
+sed -ri '/[0-9]+/!d' william.txt            # remove no numbers
 ```
+- `rsmangler`
+- `bash /usr/local/bin/usernameGenerator/usernameGenerator.sh` to create username lists
 
-## Back End - Developing Frameworks & APIs
-Web Dev Frameworks
-- Laravel (PHP) - startups/smaller companies & powerful yet easy to dev for
-- Express (Node.JS)
-- Django (Python)
-- Rails (Ruby)
-- APIs connect front end and back end to send data back and forth
-- Front End uses APIs toask back end components for specific task with specific input
-- Back end processes the request, performs the functions as necessary and returns response to front end
-
-### Query Params
-- Default method is `GET`/`POST` params
-- Can specify values for certain parameters used within the page for back end components to process & respond
-  - `search.php` would take `item` param, which is used to specify the search, and so passing it through a URL would look like `search.php?item=apples`
-  - `POST` param would pass it as data at the bottom of a `POST HTTP` request
-
-- API - specifies how app can interact with other applications
-- Usually accessible over `HTTP` and handled and translated through web servers
-- **SOAP (Simple Object Access)** - shares data through XML - request is made in XML via HTTP request, and response returned in XML
-  - Front end parses XML output properly
-  - Useful for structured & binary data
-  - Often used with serialized objects
-  - Useful for sharing *stateful* objects
-- **REST (Representational State Transfer)** - shares data through URL path (`search/users/1`) and returns output in JSON (`userid 1`)
-  - Focus on page w/ 1 type of input directly thourgh URL path
-  - Useful to search, sort, filter
-  - Usually breaks web app functionality into smaller APIs that use smaller requests to allow web app to perform more advanced actions
-  - Requests in `JSON` - and response sin `JSON`, XML, or `x-www-form-urlencoded` or even raw data
-  - Uses `GET` to retrieve data, `POST` to create, `PUT` to update existing, and `DELETE` to remove data
-
-## Back End Vuls - Common
-**Broken Authentication**- user can bypass authentication functions (i.e. regular user become admin without privs to do so)
-**Broken Acess Control** - user can access pages & features they shouldn't have access to
-**Malicious File Upload** - upload malicious script which can execute commands on remote server
-**Command Injection** - insert commands as regularly intended content which can execute commands on back end server to gain control
-**SQLi** - 
-
-
-## Back End Vuls - Public
-Tags: #publicvulns #publicvulnerabilities #vulnerabilities
-https://www.vulnerability-lab.com/
-https://www.rapid7.com/db/
-https://www.exploit-db.com/
+### Service Authentication Brute Forcing
+#enumeration #recon
+- `netstat -antp | grep i list` will show listening ports, can be useful to see if any ports are open locally (`127.0.0.1`)
